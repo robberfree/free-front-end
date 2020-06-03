@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ffe 02 ArrayBuffer</title>
+
+</head>
+
+<body>
+    <input type="file" />
+    <div>
+        检测文件的magic number，获得的文件类型为:<label></label>
+    </div>
+
+    <script src="getFileType2.js"></script>
+    <script>
+        (function () {
+            var input = document.querySelector('input');
+            var label = document.querySelector('label');
+            input.addEventListener('change', function () {
+                var file = input.files[0];
+                var fr = new FileReader();
+                fr.addEventListener('load', function () {
+                    var arrayBuffer = fr.result;
+                    var type = getFileType(arrayBuffer);
+                    label.textContent = type;
+                    console.log(type);
+                })
+                fr.readAsArrayBuffer(file);
+            });
+
+
+        })();
+    </script>
+
+</body>
+
+</html>
