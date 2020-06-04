@@ -16,10 +16,10 @@ var getFileType = (function () {
     jpeg: function (uint8Array) {
       var len = uint8Array.length;
       if (
-        toHex(uint8Array[0]) === "ff" &&
-        toHex(uint8Array[1]) === "d8" &&
-        toHex(uint8Array[len - 2]) === "ff" &&
-        toHex(uint8Array[len - 1]) === "d9"
+        uint8Array[0] === 0xff &&
+        uint8Array[1] === 0xd8 &&
+        uint8Array[len - 2] === 0xff &&
+        uint8Array[len - 1] === 0xd9
       ) {
         return "jpeg";
       }
@@ -45,12 +45,12 @@ var getFileType = (function () {
       }
     },
     png: function (uint8Array) {
-      var magicNumber = ["89", "50", "4e", "47", "0d", "0a", "1a", "0a"];
+      var magicNumber = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
       var len = magicNumber.length;
       var b = true;
       for (var i = 0; i < len; i++) {
-        var hex = toHex(uint8Array[i], 2);
-        if (hex !== magicNumber[i]) {
+        var number = uint8Array[i];
+        if (number !== magicNumber[i]) {
           b = false;
           break;
         }
@@ -60,16 +60,6 @@ var getFileType = (function () {
       }
     },
   };
-
-  function toHex(number, len) {
-    var hex = number.toString(16);
-    if (typeof len === "number") {
-      if (hex.length < len) {
-        hex = hex.padStart(len, "0");
-      }
-    }
-    return hex;
-  }
 
   function toChar(number) {
     return String.fromCharCode(number);
